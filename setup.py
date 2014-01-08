@@ -1,5 +1,23 @@
+import pkg_resources
 from setuptools import setup
 from setuptools import find_packages
+
+def pillow_installed():
+    """Check if Pillow is installed"""
+    pillow_req = pkg_resources.Requirement.parse('Pillow')
+    try:
+        pkg_resources.get_provider(pillow_req)
+    except pkg_resources.DistributionNotFound:
+        return False
+    else:
+        return True
+
+install_requires = ['setuptools', 'CherryPy']
+
+if pillow_installed():
+    install_requires.append('Pillow')
+else:
+    install_requires.append('PIL')
 
 setup(
     name="dowser",
@@ -20,7 +38,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
 
-    install_requires = ['PIL', 'setuptools', 'CherryPy'],
+    install_requires = install_requires,
 
     package_dir = {'': 'src'},
     package_data = {'': [
